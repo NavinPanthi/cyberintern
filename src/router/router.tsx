@@ -4,18 +4,18 @@ import { useSelector } from "react-redux";
 
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
-import PageNotFound from "@/pages/404";
 import ErrorBoundary from "@/components/error-boundary";
 
 import { RootState } from "@/redux/store";
 import { getUserData } from "@/utils/auth-storage";
 import { checkAdmin } from "@/utils/check-admin";
-import { checkSeller } from "@/utils/check-seller";
+import { checkEmployer } from "@/utils/check-employer";
 
+import PageNotFound from "../../src/pages/404";
 import LayoutWrapper from "./layout-wrapper";
 import adminRoutes from "./routes/admin-routes";
 import authRoutes from "./routes/auth-routes";
-import SellerRoutes from "./routes/seller-routes";
+import EmployerRoutes from "./routes/employer-routes";
 import userRoutes from "./routes/user-routes";
 
 const MergedLayoutRoute = ({ children }: { children?: React.ReactNode }) => {
@@ -43,8 +43,8 @@ const getRoutes = (loginStatus: boolean) => {
 
   return checkAdmin(getUserData())
     ? adminRoutes
-    : checkSeller(getUserData())
-      ? SellerRoutes
+    : checkEmployer(getUserData())
+      ? EmployerRoutes
       : userRoutes;
 };
 

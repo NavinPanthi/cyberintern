@@ -7,18 +7,18 @@ export interface INavigation {
   icon: React.FC<HugeiconsProps> | string;
 }
 
-export const sellerLinks: INavigation[] = [
+export const employerLinks: INavigation[] = [
   {
     id: "Products",
     name: "Products",
-    path: "/seller/products",
+    path: "/employer/products",
     icon: BarCode01Icon,
   },
 
   {
     id: "Orders",
     name: "Orders",
-    path: "/seller/orders",
+    path: "/employer/orders",
     icon: ClipboardIcon,
   },
 ];

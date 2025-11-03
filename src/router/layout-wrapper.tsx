@@ -3,28 +3,28 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import AdminLayout from "@/layout/admin-layout";
-import SellerLayout from "@/layout/seller-layout";
+import EmployerLayout from "@/layout/employer-layout";
 
 import { RootState } from "@/redux/store";
 import { getUserData } from "@/utils/auth-storage";
 import { checkAdmin } from "@/utils/check-admin";
-import { checkSeller } from "@/utils/check-seller";
+import { checkEmployer } from "@/utils/check-employer";
 
 function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
 
   const userData = getUserData();
-  const isSeller = checkSeller(userData);
+  const isEmployer = checkEmployer(userData);
   const isAdmin = checkAdmin(userData);
 
   if (!loginStatus) {
     return <Fragment>{children}</Fragment>;
   }
 
-  if (isSeller) {
-    return <SellerLayout>{children}</SellerLayout>;
+  if (isEmployer) {
+    return <EmployerLayout>{children}</EmployerLayout>;
   }
-  if (isAdmin && !isSeller) {
+  if (isAdmin && !isEmployer) {
     return <AdminLayout>{children}</AdminLayout>;
   }
 
