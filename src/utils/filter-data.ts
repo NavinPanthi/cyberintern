@@ -1,20 +1,15 @@
-export const conditions = [
-  { id: "brand_new", title: "Brand New" },
-  { id: "like_new", title: "Like New" },
-  { id: "very_good", title: "Very Good" },
-  { id: "good", title: "Good" },
-  { id: "acceptable", title: "Acceptable" },
-  { id: "damaged", title: "Damaged" },
+export const type = [
+  { id: "onsite", value: "onsite", title: "On site" },
+  { id: "remote", value: "remote", title: "Remote" },
+  { id: "hybrid", value: "hybrid", title: "Hybrid" },
 ];
-export const verifiedOptions = [
-  { id: "all", value: "", name: "All" },
-  { id: "verified", value: "true", name: "Verified" },
-  { id: "non-verified", value: "false", name: "Non Verified" },
+export const skillLevels = [
+  { id: "beginner", value: "beginner", title: "Beginner" },
+  { id: "intermediate", value: "intermediate", title: "Intermediate" },
+  { id: "advanced", value: "advanced", title: "Advanced" },
 ];
 
-export const orderStatusOptions = [
-  { id: "all", value: "", name: "All" },
-  { id: "pending", value: "pending", name: "Pending" },
-  { id: "completed", value: "completed", name: "Completed" },
-  { id: "cancelled", value: "cancelled", name: "Cancelled" },
+export const payment = [
+  { id: "paid", value: "paid", title: "Paid" },
+  { id: "unpaid", value: "unpaid", title: "Unpaid" },
 ];

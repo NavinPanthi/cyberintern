@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Calendar01Icon,
@@ -8,16 +9,18 @@ import {
 } from "hugeicons-react";
 
 interface InternshipCardProps {
+  id: number | string;
   title: string;
   company: string;
   image: string;
   datePosted: string;
-  type: "Remote" | "On-site" | "Hybrid";
+  type: "Remote" | "Onsite" | "Hybrid";
   skillLevel: "Beginner" | "Intermediate" | "Advanced";
   payment: "Paid" | "Unpaid";
 }
 
 const InternshipCard: React.FC<InternshipCardProps> = ({
+  id,
   title,
   company,
   image,
@@ -26,8 +29,13 @@ const InternshipCard: React.FC<InternshipCardProps> = ({
   skillLevel,
   payment,
 }) => {
+  const navigate = useNavigate();
+  console.log(id);
   return (
-    <div className="overflow-hidden rounded-2xl bg-white shadow-md transition duration-300 hover:shadow-lg">
+    <div
+      className="cursor-pointer overflow-hidden rounded-2xl bg-white shadow-md transition duration-300 hover:shadow-lg"
+      onClick={() => navigate(`/internship/${id}`)}
+    >
       {/* Image with title overlay */}
       <div className="relative">
         <img src={image} alt={title} className="h-48 w-full object-cover" />

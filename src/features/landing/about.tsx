@@ -1,10 +1,7 @@
 import {
-  Coins01Icon,
   ComputerCloudIcon,
-  DeliveryTruck01Icon,
   DocumentCodeIcon,
   LaptopIcon,
-  VestIcon,
 } from "hugeicons-react";
 
 // Main Component

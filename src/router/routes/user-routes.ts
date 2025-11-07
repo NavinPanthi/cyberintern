@@ -1,18 +1,14 @@
 import { lazy } from "react";
 
-import Landing from "@/pages/landing/landing";
+import Login from "@/pages/auth/login";
+import AboutPage from "@/pages/landing/about";
+import ContactPage from "@/pages/landing/contact";
+import ExplorePage from "@/pages/landing/explore";
+import InternshipDetailStudentPage from "@/pages/student/intern-detail-page";
+import MyApplication from "@/pages/student/my-application";
+import StudentProfilePage from "@/pages/student/student-profile";
 
-// import AboutPage from "@/pages/landing/about";
-// import ContactPage from "@/pages/landing/contact";
-// import ShopPage from "@/pages/landing/shop";
-// import CartPage from "@/pages/user/cart";
-// import ChangePasswordFormPage from "@/pages/user/change-password-form";
-// import OrderPage from "@/pages/user/order/order";
-// import PaymentPage from "@/pages/user/payment-page";
-// import ProductDetailUserPage from "@/pages/user/product-detail-page";
-// import UserProfilePage from "@/pages/user/user-profile-page";
-
-// const Landing = lazy(() => import("@/pages/landing/landing"));
+const Landing = lazy(() => import("@/pages/landing/landing"));
 interface IUserRoutes {
   id: string;
   path: string;
@@ -34,87 +30,68 @@ const userRoutes: IUserRoutes[] = [
       privateRoute: false,
     },
   },
-  // {
-  //   id: "about",
-  //   path: "/about",
-  //   component: AboutPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: false,
-  //   },
-  // },
-  // {
-  //   id: "contact-us",
-  //   path: "/contact",
-  //   component: ContactPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: false,
-  //   },
-  // },
-  // {
-  //   id: "shop",
-  //   path: "/shop",
-  //   component: ShopPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: false,
-  //   },
-  // },
-  // {
-  //   id: "cart",
-  //   path: "/cart",
-  //   component: CartPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "product-page",
-  //   path: "/product/:id",
-  //   component: ProductDetailUserPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: false,
-  //   },
-  // },
-  // {
-  //   id: "order-page",
-  //   path: "/orders",
-  //   component: OrderPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "payment",
-  //   path: "/payment",
-  //   component: PaymentPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "profile",
-  //   path: "/profile",
-  //   component: UserProfilePage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "change-password",
-  //   path: "/change-password",
-  //   component: ChangePasswordFormPage,
-  //   meta: {
-  //     userLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
+  {
+    id: "log-in",
+    path: "/log-in",
+    component: Login,
+    meta: {
+      privateRoute: false,
+    },
+  },
+  {
+    id: "about",
+    path: "/about",
+    component: AboutPage,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
+  {
+    id: "contact-us",
+    path: "/contact",
+    component: ContactPage,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
+  {
+    id: "explore",
+    path: "/internship",
+    component: ExplorePage,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
+  {
+    id: "internship-page",
+    path: "/internship/:id",
+    component: InternshipDetailStudentPage,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
+  {
+    id: "application-page",
+    path: "/my-applications",
+    component: MyApplication,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
+  {
+    id: "student-profile",
+    path: "/student-profile",
+    component: StudentProfilePage,
+    meta: {
+      userLayout: true,
+      privateRoute: false,
+    },
+  },
 ];
 
 export default userRoutes;

@@ -24,7 +24,7 @@ const MergedLayoutRoute = ({ children }: { children?: React.ReactNode }) => {
       <Suspense
         fallback={
           <div className="flex h-[calc(100vh-96px)] w-full items-center justify-center p-0">
-            <img height={200} width={200} src="/public/logo.png" alt="logo" />
+            <img src="/public/logo1.gif" />
           </div>
         }
       >
@@ -50,8 +50,10 @@ const getRoutes = (loginStatus: boolean) => {
 
 function Router() {
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
+  console.log(loginStatus);
   const routes = getRoutes(loginStatus as boolean);
 
+  console.log(routes);
   return (
     <BrowserRouter>
       <Routes>

@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
   ClipboardIcon,
   Logout01Icon,
+  Menu02Icon,
+  MultiplicationSignIcon,
   Profile02Icon,
-  ResetPasswordIcon,
   UserIcon,
 } from "hugeicons-react";
+import { motion } from "motion/react";
 
 import LogoutModal from "@/components/auth/logout-modal";
 import Button from "@/components/ui/button";
@@ -16,137 +18,200 @@ import Popup from "@/components/ui/popup";
 import { getUserData } from "@/utils/auth-storage";
 import { checkUser } from "@/utils/check-user";
 import { getInitialsTitle } from "@/utils/get-initials-title";
+import cn from "@/lib/classnames";
 
 const Navbar = () => {
-  const [isModal, setIsModal] = useState(false);
   const navigate = useNavigate();
+  const [isNavbarOpened, setIsNavbarOpened] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const userData = getUserData();
+  console.log(userData);
   const isUser = checkUser(userData);
 
-  const handleHomeClick = () => {
-    navigate("/");
-  };
-  const handleExploreClick = () => {
-    navigate("/explore");
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsNavbarOpened(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, []);
 
-  const handleAboutClick = () => {
-    navigate("/about");
-  };
-
-  const handleContactClick = () => {
-    navigate("/contact");
-  };
-
-  const handleUserClick = () => {
-    if (!isUser) {
-      navigate("/log-in");
-    }
-  };
-
-  const renderTabs = () => {
-    const tabs = [
-      { id: 1, title: "home", onClick: handleHomeClick },
-      { id: 2, title: "explore", onClick: handleExploreClick },
-      { id: 2, title: "about", onClick: handleAboutClick },
-      { id: 3, title: "contact us", onClick: handleContactClick },
-      {
-        id: 4,
-        icon: GetProfileIcon(),
-        onClick: handleUserClick,
-      },
-      // { id: 5, icon: GetCartIcon(), onClick: handleCartClick },
-    ];
-
-    return tabs.map((tab) => (
-      <li key={tab.id} className="nav-item">
-        <a className="hover:cursor-pointer" onClick={tab.onClick}>
-          {tab.title ? tab.title : tab.icon}
-        </a>
-      </li>
-    ));
-  };
   const GetProfileIcon = () => {
-    const userData = getUserData();
-    const isUser = checkUser(userData);
     return isUser ? (
-      <>
-        <Popup
-          button={
-            <p className="rounded-full border border-shade-light p-2">
-              {getInitialsTitle(userData?.fullName)}
-            </p>
-          }
-          className="py-2"
-        >
-          <div className="flex min-w-fit flex-col gap-1 rounded-lg">
-            <Button
-              rounded="sm"
-              type="button"
-              variant="tertiary"
-              LeftIcon={ClipboardIcon}
-              size="sm"
-              className="justify-start text-nowrap"
-              onClick={() => navigate("/orders")}
-            >
-              My orders
-            </Button>
-            <Button
-              rounded="sm"
-              type="button"
-              variant="tertiary"
-              LeftIcon={Profile02Icon}
-              size="sm"
-              className="justify-start"
-              onClick={() => navigate("/profile")}
-            >
-              Profile
-            </Button>
-            <Button
-              rounded="sm"
-              type="button"
-              variant="tertiary"
-              size="sm"
-              LeftIcon={ResetPasswordIcon}
-              className="justify-start text-nowrap"
-              onClick={() => navigate("/change-password")}
-            >
-              Change password
-            </Button>
-            <Button
-              rounded="sm"
-              type="button"
-              variant="danger"
-              size="sm"
-              className="justify-start text-nowrap"
-              LeftIcon={Logout01Icon}
-              onClick={() => {
-                setIsModal(true);
-              }}
-            >
-              Log out
-            </Button>
-          </div>
-        </Popup>
-      </>
+      <Popup
+        button={
+          <p className="rounded-full border border-shade-light px-3 py-2">
+            {getInitialsTitle(userData?.fullName)}
+          </p>
+        }
+        className="py-2"
+      >
+        <div className="flex min-w-fit flex-col gap-1 rounded-lg">
+          <Button
+            rounded="sm"
+            type="button"
+            variant="tertiary"
+            LeftIcon={ClipboardIcon}
+            size="sm"
+            className="justify-start text-nowrap"
+            onClick={() => navigate("/my-applications")}
+          >
+            My applications
+          </Button>
+          <Button
+            rounded="sm"
+            type="button"
+            variant="tertiary"
+            LeftIcon={Profile02Icon}
+            size="sm"
+            className="justify-start"
+            onClick={() => navigate("/student-profile")}
+          >
+            Profile
+          </Button>
+          {/* <Button
+            rounded="sm"
+            type="button"
+            variant="tertiary"
+            size="sm"
+            LeftIcon={ResetPasswordIcon}
+            className="justify-start text-nowrap"
+            onClick={() => navigate("/change-password")}
+          >
+            Change password
+          </Button> */}
+          <Button
+            rounded="sm"
+            type="button"
+            variant="danger"
+            size="sm"
+            className="justify-start text-nowrap"
+            LeftIcon={Logout01Icon}
+            onClick={() => setIsModal(true)}
+          >
+            Log out
+          </Button>
+        </div>
+      </Popup>
     ) : (
-      <UserIcon />
+      <UserIcon onClick={() => navigate("/log-in")} />
+    );
+  };
+
+  const tabs = [
+    { id: 1, title: "home", onClick: () => navigate("/") },
+    { id: 2, title: "explore", onClick: () => navigate("/internship") },
+    { id: 3, title: "about", onClick: () => navigate("/about") },
+    { id: 4, title: "contact us", onClick: () => navigate("/contact") },
+    {
+      id: 5,
+      title: "My applications",
+      onClick: () => navigate("/my-applications"),
+    },
+    { id: 6, title: "Profile", onClick: () => navigate("/profile") },
+    { id: 7, title: "Log out", onClick: () => navigate("/log-in") },
+  ];
+
+  const renderTabs = (className?: string) =>
+    tabs
+      .filter((tab) => {
+        if (!isNavbarOpened && (tab.id === 5 || tab.id === 6 || tab.id === 7)) {
+          return false;
+        }
+        return true;
+      })
+      .map((tab) => (
+        <motion.li
+          key={tab.id}
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", delay: 0.1 }}
+          className={cn(
+            "hover:text-core-light cursor-pointer uppercase",
+            className
+          )}
+          onClick={() => {
+            tab.onClick();
+            setIsNavbarOpened(false);
+          }}
+        >
+          {tab.title}
+        </motion.li>
+      ));
+
+  const NavLists = () => {
+    if (!isNavbarOpened) return null;
+    return (
+      <motion.ul
+        className="flex w-full flex-col items-center gap-5 text-shade-light"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", delay: 0.1 }}
+      >
+        {renderTabs("w-full flex justify-center")}
+      </motion.ul>
     );
   };
 
   return (
     <>
-      <nav className="sticky top-0 z-50 flex h-28 items-center justify-between bg-core-primary px-4 tracking-widest text-shade-light lg:px-28">
-        <a
-          className="leading border border-shade-light px-10 py-3 text-3xl uppercase"
-          href="/"
-        >
-          CI
-        </a>
-        <ul className="flex items-center gap-10 overflow-auto uppercase">
-          {renderTabs()}
-        </ul>
-      </nav>
+      <motion.nav
+        ref={ref}
+        initial={{ y: -80 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring" }}
+        className={cn(
+          "sticky top-0 z-50 flex h-fit min-h-20 w-full items-center rounded-b-xl bg-core-primary text-lg tracking-wide text-shade-light sm:px-12 xl:px-28",
+          { "shadow-lg": isNavbarOpened }
+        )}
+      >
+        {/* Desktop */}
+        <div className="hidden w-full items-center justify-between sm:flex">
+          <motion.p
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", delay: 0.1 }}
+            className="cursor-pointer text-2xl font-semibold"
+            onClick={() => navigate("/")}
+          >
+            CI
+          </motion.p>
+          <ul className="flex items-center gap-10">{renderTabs()}</ul>
+          <span className="cursor-pointer">
+            <GetProfileIcon />
+          </span>
+        </div>
+
+        <div className="flex w-full flex-col items-center justify-between gap-6 p-4 sm:hidden">
+          <div className="flex w-full items-center justify-between">
+            <p
+              className="cursor-pointer text-2xl font-semibold"
+              onClick={() => navigate("/")}
+            >
+              CI
+            </p>
+            {isNavbarOpened ? (
+              <MultiplicationSignIcon
+                className="cursor-pointer text-3xl"
+                onClick={() => setIsNavbarOpened(false)}
+              />
+            ) : (
+              <Menu02Icon
+                className="cursor-pointer text-3xl"
+                onClick={() => setIsNavbarOpened(true)}
+              />
+            )}
+          </div>
+          <NavLists />
+        </div>
+      </motion.nav>
+
       <LogoutModal isOpen={isModal} closeModal={() => setIsModal(!isModal)} />
     </>
   );

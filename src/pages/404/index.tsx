@@ -31,7 +31,7 @@ function PageNotFound({
           descriptionClassName
         )}
       >
-        The Page you are looking for does&apos;t exists.
+        The Page you are looking for doesn&apos;t exists.
       </p>
 
       {showHomeButton && (

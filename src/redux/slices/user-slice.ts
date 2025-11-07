@@ -1,36 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
-  getToken,
   getUserData,
   isUserLogin,
   resetLoginData,
   setUserData,
-  setUserLogin,
 } from "../../utils/auth-storage";
 
+export interface IInternship {
+  company: string;
+  title: string;
+  dateApplied: string | Date;
+  status: string;
+}
+
+// Define structure for user data
 export interface IUser {
-  id: number;
   fullName: string;
   email: string;
   address?: string;
   phone?: string;
-  imageName?: string;
-  imageType?: string;
-  imageData?: string;
-  roles: string[];
-  token: string;
+  role?: string;
+  internships?: IInternship[];
 }
 
 export interface IUserState {
-  accessToken: string | null;
   user: IUser | null;
   loginStatus: boolean;
 }
 
 const initialState: IUserState = {
-  accessToken: getToken() || null,
-  user: getUserData() || {},
+  user: getUserData() || null,
   loginStatus: isUserLogin() || false,
 };
 
@@ -38,16 +38,22 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setLogin: (state, action) => {
-      setUserLogin({ ...action.payload });
-      state.accessToken = action.payload?.token;
-      state.user = action.payload?.userData;
+    setUser: (state, action) => {
+      const updatedUser = { ...state.user, ...action.payload } as IUser;
+      setUserData(updatedUser);
+      state.user = updatedUser;
       state.loginStatus = true;
     },
 
-    setUser: (state, action) => {
-      setUserData({ ...state.user, ...action.payload });
-      state.user = { ...state.user, ...action.payload };
+    addInternship: (state, action) => {
+      if (state.user) {
+        const updatedUser = {
+          ...state.user,
+          internships: [...(state.user.internships || []), action.payload],
+        };
+        setUserData(updatedUser);
+        state.user = updatedUser;
+      }
     },
 
     resetLogin: (state) => {
@@ -58,5 +64,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLogin, setUser, resetLogin } = userSlice.actions;
+export const { setUser, addInternship, resetLogin } = userSlice.actions;
 export default userSlice.reducer;
