@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import InternshipCard from "@/components/explore/internship-card";
+import InternSearchInput from "@/features/student/internship-search-input";
 import InternshipShimmer from "@/components/explore/internship-shimmer";
+import ShimmerTable from "@/components/explore/internship-table-shinmer";
+import InternshipTable from "@/components/internships/internships-table";
 
 import { internships } from "@/utils/data/internship-data";
 
-import InternSearchInput from "../student/internship-search-input";
-
-const Explore = () => {
+const EmployerInternships = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const params = new URLSearchParams(location.search);
@@ -58,9 +58,12 @@ const Explore = () => {
   }, [search, selectedType, selectedSkillLevel, selectedPayment]);
 
   return (
-    <div className="relative gap-2 px-4 lg:px-28">
+    <div className="relative gap-2 px-4">
+      <h2 className="mb-4 pt-12 text-3xl font-bold text-gray-800 md:text-4xl">
+        Posted Internships
+      </h2>
       <InternSearchInput
-        className="sticky top-20 z-20 flex flex-col items-center justify-between gap-3 bg-shade-light py-2 text-sm md:flex-row md:gap-1 lg:py-6 xl:text-base"
+        className="flex flex-col items-center justify-between gap-3 rounded-xl bg-shade-light p-6 text-sm md:flex-row md:gap-1 xl:text-base"
         selectedType={selectedType}
         selectedSkillLevel={selectedSkillLevel}
         selectedPayment={selectedPayment}
@@ -70,24 +73,15 @@ const Explore = () => {
         setSelectedPayment={setSelectedPayment}
         setSearch={setSearch}
       />
-
       {isLoading ? (
-        <InternshipShimmer />
+        <ShimmerTable />
       ) : (
-        <div className="z-10 grid grid-cols-1 gap-4 py-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filteredInternships.length > 0 ? (
-            filteredInternships.map((internship, idx) => (
-              <InternshipCard key={idx} {...internship} />
-            ))
-          ) : (
-            <p className="col-span-full flex min-h-[50vh] items-center justify-center text-gray-500">
-              No internships found.
-            </p>
-          )}
+        <div className="py-12">
+          <InternshipTable internships={filteredInternships} />
         </div>
       )}
     </div>
   );
 };
 
-export default Explore;
+export default EmployerInternships;

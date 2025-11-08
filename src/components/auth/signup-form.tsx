@@ -60,7 +60,7 @@ const SignUpForm = ({
             role: isSignUpAsEmployer ? "employer" : "student",
           })
         );
-        navigate("/log-in");
+        if (isSignUpAsEmployer) navigate("/employer-profile");
       })}
     >
       <fieldset>

@@ -15,7 +15,7 @@ import LogoutModal from "@/components/auth/logout-modal";
 import Button from "@/components/ui/button";
 import Popup from "@/components/ui/popup";
 
-import { getUserData } from "@/utils/auth-storage";
+import { getUserData, isUserLogin } from "@/utils/auth-storage";
 import { checkUser } from "@/utils/check-user";
 import { getInitialsTitle } from "@/utils/get-initials-title";
 import cn from "@/lib/classnames";
@@ -114,18 +114,31 @@ const Navbar = () => {
       title: "My applications",
       onClick: () => navigate("/my-applications"),
     },
-    { id: 6, title: "Profile", onClick: () => navigate("/profile") },
-    { id: 7, title: "Log out", onClick: () => navigate("/log-in") },
+    { id: 6, title: "Profile", onClick: () => navigate("/student-profile") },
+    {
+      id: 7,
+      title: "Log out",
+      onClick: () => {
+        setIsModal(true);
+      },
+    },
   ];
 
   const renderTabs = (className?: string) =>
     tabs
       .filter((tab) => {
-        if (!isNavbarOpened && (tab.id === 5 || tab.id === 6 || tab.id === 7)) {
+        // Hide tabs 5, 6, 7 when navbar is closed OR user not logged in
+        if (
+          (tab.id === 5 || tab.id === 6 || tab.id === 7) &&
+          (!isNavbarOpened || !isUser)
+        ) {
           return false;
         }
+
+        // Otherwise, keep the tab visible
         return true;
       })
+
       .map((tab) => (
         <motion.li
           key={tab.id}

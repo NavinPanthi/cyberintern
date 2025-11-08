@@ -1,8 +1,6 @@
-// import EmployerOrdersPage from "@/pages/employer/orders/employer-orders-page";
-// import ProductDetailEmployerPage from "@/pages/employer/products/product-detail-page";
-// import EmployerProductsPage from "@/pages/employer/products/employer-products-page";
-// import EmployerProfilePage from "@/pages/employer/profile";
-// import EmployerChangePassword from "@/pages/employer/profile/employer-change-password";
+import EmployerInternships from "@/pages/employer/employer-internships";
+import EmployerProfilePage from "@/pages/employer/employer-profile";
+import InternshipDetailStudentPage from "@/pages/student/intern-detail-page";
 
 interface IEmployerRoutes {
   id: string;
@@ -14,49 +12,31 @@ interface IEmployerRoutes {
   };
 }
 const EmployerRoutes: IEmployerRoutes[] = [
-  // {
-  //   id: "employer-products",
-  //   path: "/employer/products",
-  //   component: EmployerProductsPage,
-  //   meta: {
-  //     employerLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "employer-orders",
-  //   path: "/employer/orders",
-  //   component: EmployerOrdersPage,
-  //   meta: {
-  //     employerLayout: true,
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "employer-profile",
-  //   path: "/employer/profile",
-  //   component: EmployerProfilePage,
-  //   meta: {
-  //     privateRoute: true,
-  //     employerLayout: true,
-  //   },
-  // },
-  // {
-  //   id: "product-detail",
-  //   path: "/product/:id",
-  //   component: ProductDetailEmployerPage,
-  //   meta: {
-  //     privateRoute: true,
-  //   },
-  // },
-  // {
-  //   id: "change-password",
-  //   path: "/employer/change-password",
-  //   component: EmployerChangePassword,
-  //   meta: {
-  //     privateRoute: true,
-  //   },
-  // },
+  {
+    id: "employer-profile",
+    path: "/employer-profile",
+    component: EmployerProfilePage,
+    meta: {
+      privateRoute: true,
+      employerLayout: true,
+    },
+  },
+  {
+    id: "employer-internships",
+    path: "/employer/internships",
+    component: EmployerInternships,
+    meta: {
+      privateRoute: true,
+    },
+  },
+  {
+    id: "internship-page",
+    path: "/internship/:id",
+    component: InternshipDetailStudentPage,
+    meta: {
+      privateRoute: false,
+    },
+  },
 ];
 
 export default EmployerRoutes;

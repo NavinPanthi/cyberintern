@@ -48,7 +48,7 @@ export const internships: InternshipCardProps[] = [
     type: "Remote",
     skillLevel: "Advanced",
     payment: "Paid",
-    company: "ABC",
+    company: "Panthi company",
   },
   {
     id: 5,
@@ -58,7 +58,7 @@ export const internships: InternshipCardProps[] = [
     type: "Onsite",
     skillLevel: "Intermediate",
     payment: "Unpaid",
-    company: "ABC",
+    company: "Panthi company",
   },
   {
     id: 6,
@@ -68,7 +68,7 @@ export const internships: InternshipCardProps[] = [
     type: "Hybrid",
     skillLevel: "Beginner",
     payment: "Paid",
-    company: "ABC",
+    company: "Panthi company",
   },
   {
     id: 7,
@@ -78,7 +78,7 @@ export const internships: InternshipCardProps[] = [
     type: "Onsite",
     skillLevel: "Intermediate",
     payment: "Paid",
-    company: "ABC",
+    company: "Panthi company",
   },
   {
     id: 8,
@@ -88,7 +88,7 @@ export const internships: InternshipCardProps[] = [
     type: "Remote",
     skillLevel: "Advanced",
     payment: "Unpaid",
-    company: "ABC",
+    company: "Panthi company",
   },
   {
     id: 9,
@@ -98,6 +98,6 @@ export const internships: InternshipCardProps[] = [
     type: "Hybrid",
     skillLevel: "Beginner",
     payment: "Paid",
-    company: "ABC",
+    company: "Panthi company",
   },
 ];

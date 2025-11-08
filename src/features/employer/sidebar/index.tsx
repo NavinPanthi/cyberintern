@@ -33,9 +33,9 @@ const EmployerSidebar = ({ className }: { className: string }) => {
     <div className={cn(className, "flex flex-col")}>
       <Link
         className="leading border border-shade-light px-10 py-3 text-3xl uppercase"
-        to="/employer/products"
+        to="/employer/internships"
       >
-        Thrifty
+        CI
       </Link>
 
       <div className="mt-4 flex flex-col gap-2">
@@ -64,7 +64,7 @@ const EmployerSidebar = ({ className }: { className: string }) => {
       </div>
       <div className="mt-auto w-full">
         <Popup
-          className="!right-2 !mt-[-240px] border !border-shade-light !bg-core-primary text-shade-light shadow-2xl"
+          className="!right-2 !mt-[-200px] border !border-shade-light !bg-core-primary text-shade-light shadow-2xl"
           buttonClassName="w-full"
           button={
             <div
@@ -81,22 +81,22 @@ const EmployerSidebar = ({ className }: { className: string }) => {
         >
           <div>
             <Link
-              to="/employer/profile"
+              to="/employer-profile"
               className={cn(
                 "mt-4 flex items-center gap-2 rounded-lg px-[10px] py-[9px] shadow transition-colors hover:rounded-lg",
                 {
                   "bg-shade-light text-core-primary":
-                    pathname.includes("/employer/profile".split("?")[0]) ||
-                    pathname.includes("/employer/profile"),
+                    pathname.includes("/employer-profile".split("?")[0]) ||
+                    pathname.includes("/employer-profile"),
                   "text-shade-light/70 hover:bg-neutral-50 hover:text-core-primary hover:ease-linear":
-                    !pathname.includes("/employer/profile".split("?")[0]) ||
-                    !pathname.includes("/employer/profile"),
+                    !pathname.includes("/employer-profile".split("?")[0]) ||
+                    !pathname.includes("/employer-profile"),
                 }
               )}
             >
               <UserAccountIcon /> <p>Profile</p>
             </Link>
-            <Link
+            {/* <Link
               to="/employer/change-password"
               className={cn(
                 "mt-2 flex items-center gap-2 rounded-lg px-[10px] py-[9px] shadow transition-colors hover:rounded-lg",
@@ -113,7 +113,7 @@ const EmployerSidebar = ({ className }: { className: string }) => {
               )}
             >
               <UserAccountIcon /> <p>Change Password</p>
-            </Link>
+            </Link> */}
             <Button
               className="my-2 flex w-full justify-start px-[10px] py-[9px] text-shade-light/70 shadow transition-colors hover:rounded-lg hover:bg-neutral-50 hover:text-core-primary hover:ease-linear"
               LeftIcon={Logout01Icon}

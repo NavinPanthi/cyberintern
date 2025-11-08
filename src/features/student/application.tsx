@@ -8,7 +8,11 @@ const Application = () => {
   const user = useSelector((state: RootState) => state.user.user);
 
   if (!user || !user.internships || user.internships.length === 0) {
-    return <p className="text-gray-500">No internship activities found.</p>;
+    return (
+      <p className="my-28 p-6 text-center text-xl text-gray-500 lg:text-3xl">
+        No internship activities found.
+      </p>
+    );
   }
 
   return (

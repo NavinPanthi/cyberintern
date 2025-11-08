@@ -30,7 +30,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   return (
     <div className={cn({ relative: isPasswordInput }, containerClassName)}>
       <input
-        className={cn("input min-w-72 lg:min-w-96", inputClassName, {
+        className={cn("input", inputClassName, {
           "border-supporting-error text-supporting-error focus:border-supporting-error":
             errorMsg,
         })}

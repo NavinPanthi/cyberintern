@@ -9,16 +9,9 @@ export interface INavigation {
 
 export const employerLinks: INavigation[] = [
   {
-    id: "Products",
-    name: "Products",
-    path: "/employer/products",
+    id: "Internships",
+    name: "Internships",
+    path: "/employer/internships",
     icon: BarCode01Icon,
-  },
-
-  {
-    id: "Orders",
-    name: "Orders",
-    path: "/employer/orders",
-    icon: ClipboardIcon,
   },
 ];

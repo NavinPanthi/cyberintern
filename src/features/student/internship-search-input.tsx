@@ -62,8 +62,10 @@ const InternSearchInput = ({
     <div className={cn(className)}>
       <SearchInput
         placeholder="Search products"
+        containerClassName=" xs:w-[10%] sm:w-[30%] xl:w-[40%] 2xl:w-[50%] semi-2xl:w-[60%] "
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        // className="min-w-72 lg:min-w-96"
       />
 
       <div className="flex gap-1 md:gap-2">

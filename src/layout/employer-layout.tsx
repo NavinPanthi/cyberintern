@@ -11,11 +11,11 @@ function EmployerLayout({ children }: { children: React.ReactNode }) {
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
 
   if (!loginStatus) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/log-in" />;
   }
 
   if (loginStatus && pathname === "/") {
-    return <Navigate replace={true} to="/" />;
+    return <Navigate replace={true} to="/employer-profile" />;
   }
 
   return (
