@@ -1,26 +1,44 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import EmployerSidebar from "@/features/employer/sidebar";
 
+import { collapseSidebar } from "@/redux/slices/sidebar-slice";
 import { RootState } from "@/redux/store";
+import cn from "@/lib/classnames";
 
 function EmployerLayout({ children }: { children: React.ReactNode }) {
-  const { pathname } = useLocation();
-
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
-
   if (!loginStatus) {
     return <Navigate to="/log-in" />;
   }
+  const dispatch = useDispatch();
+  const collapsed = useSelector(
+    (state: RootState) => state.sidebar.isCollapsed
+  );
 
-  if (loginStatus && pathname === "/") {
-    return <Navigate replace={true} to="/employer-profile" />;
-  }
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        dispatch(collapseSidebar());
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [dispatch]);
 
   return (
     <div className="relative flex h-[100vh] bg-neutral-100">
-      <EmployerSidebar className="sticky top-0 h-full w-[260px] flex-none bg-core-primary px-2 py-6 tracking-wider text-shade-light shadow-md" />
+      <EmployerSidebar
+        className={cn(
+          "sticky top-0 h-full flex-none bg-core-primary px-2 py-6 tracking-wider text-shade-light shadow-md transition-all duration-300",
+          { "w-14": collapsed, "w-[260px]": !collapsed }
+        )}
+      />
 
       <main className="w-full overflow-auto rounded-lg p-6 xl:p-20">
         {children}

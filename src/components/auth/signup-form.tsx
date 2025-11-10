@@ -60,7 +60,7 @@ const SignUpForm = ({
             role: isSignUpAsEmployer ? "employer" : "student",
           })
         );
-        if (isSignUpAsEmployer) navigate("/employer-profile");
+        isSignUpAsEmployer ? navigate("/employer-profile") : navigate("/");
       })}
     >
       <fieldset>
@@ -79,7 +79,7 @@ const SignUpForm = ({
       <fieldset className="mt-4">
         <Label htmlFor="email">
           {" "}
-          {isSignUpAsEmployer ? "Company email" : " email"}
+          {isSignUpAsEmployer ? "Company email" : " Email"}
         </Label>
 
         <TextInput

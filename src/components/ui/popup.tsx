@@ -31,7 +31,7 @@ export default function Popup({
         <Popover.Panel
           className={cn(
             className,
-            "absolute right-0 z-10 mt-3 transform rounded-2xl bg-shade-light p-1 px-4 lg:max-w-3xl"
+            "absolute right-0 !z-10 mt-3 transform rounded-2xl bg-shade-light p-1 px-4 lg:max-w-3xl"
           )}
         >
           {children}

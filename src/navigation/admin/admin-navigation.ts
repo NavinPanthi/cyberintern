@@ -1,9 +1,4 @@
-import {
-  BarCode01Icon,
-  HugeiconsProps,
-  Message01Icon,
-  UserAccountIcon,
-} from "hugeicons-react";
+import { BarCode01Icon, HugeiconsProps } from "hugeicons-react";
 
 export interface INavigation {
   id: string;
@@ -14,22 +9,9 @@ export interface INavigation {
 
 export const adminLinks: INavigation[] = [
   {
-    id: "Products",
-    name: "Products",
-    path: "/admin/products",
+    id: "internships",
+    name: "Internships",
+    path: "/admin/internships",
     icon: BarCode01Icon,
-  },
-
-  {
-    id: "Users",
-    name: "Users",
-    path: "/admin/users",
-    icon: UserAccountIcon,
-  },
-  {
-    id: "Chat",
-    name: "Chat",
-    path: "/admin/chat",
-    icon: Message01Icon,
   },
 ];

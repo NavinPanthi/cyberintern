@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Logout01Icon, UserAccountIcon } from "hugeicons-react";
@@ -12,6 +12,7 @@ import {
   INavigation,
 } from "@/navigation/employer/employer-navigation";
 
+import { toggleSidebar } from "@/redux/slices/sidebar-slice";
 import { resetLogin } from "@/redux/slices/user-slice";
 import { RootState } from "@/redux/store";
 import { getInitialsTitle } from "@/utils/get-initials-title";
@@ -20,23 +21,44 @@ import cn from "@/lib/classnames";
 const EmployerSidebar = ({ className }: { className: string }) => {
   const { pathname } = useLocation();
   const userData = useSelector((state: RootState) => state.user.user);
-  const queryClient = useQueryClient();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    queryClient.removeQueries();
     dispatch(resetLogin());
     toast.success("user logout successfully");
     navigate("/");
   };
+  const collapsed = useSelector(
+    (state: RootState) => state.sidebar.isCollapsed
+  );
+
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => setIsSmallScreen(window.innerWidth < 768);
+    checkScreen(); // Run on mount
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
   return (
     <div className={cn(className, "flex flex-col")}>
-      <Link
-        className="leading border border-shade-light px-10 py-3 text-3xl uppercase"
-        to="/employer/internships"
+      <button
+        className={cn(
+          "leading border border-shade-light text-3xl uppercase",
+          { "py-1": collapsed },
+          { "py-3": !collapsed }
+        )}
+        onClick={() => {
+          if (!isSmallScreen) {
+            dispatch(toggleSidebar());
+          }
+        }}
+        disabled={isSmallScreen}
       >
         CI
-      </Link>
+      </button>
 
       <div className="mt-4 flex flex-col gap-2">
         {employerLinks.map((label: INavigation) => {
@@ -57,25 +79,30 @@ const EmployerSidebar = ({ className }: { className: string }) => {
               )}
             >
               <label.icon />
-              <span>{label.name}</span>
+              {!collapsed ? <span>{label.name}</span> : ""}
             </Link>
           );
         })}
       </div>
       <div className="mt-auto w-full">
         <Popup
-          className="!right-2 !mt-[-200px] border !border-shade-light !bg-core-primary text-shade-light shadow-2xl"
+          className={cn(
+            "!mt-[-200px] border !border-shade-light !bg-core-primary text-shade-light shadow-2xl",
+            { "!left-12 !w-40": collapsed },
+            { "!right-2": !collapsed }
+          )}
           buttonClassName="w-full"
           button={
             <div
               className={cn(
-                "mt-4 flex items-center gap-2 rounded-lg px-[10px] py-[9px] shadow transition-colors hover:rounded-lg"
+                "mt-4 flex items-center gap-2 rounded-lg py-[9px] shadow transition-colors hover:rounded-lg",
+                { "px-[10px]": !collapsed }
               )}
             >
               <div className="flex size-10 items-center justify-center rounded-full border border-shade-light shadow-lg">
                 {userData && getInitialsTitle(userData?.fullName)}
               </div>
-              <span>{userData?.fullName}</span>
+              {collapsed ? "" : <span>{userData?.fullName}</span>}
             </div>
           }
         >
@@ -96,24 +123,7 @@ const EmployerSidebar = ({ className }: { className: string }) => {
             >
               <UserAccountIcon /> <p>Profile</p>
             </Link>
-            {/* <Link
-              to="/employer/change-password"
-              className={cn(
-                "mt-2 flex items-center gap-2 rounded-lg px-[10px] py-[9px] shadow transition-colors hover:rounded-lg",
-                {
-                  "bg-shade-light text-core-primary":
-                    pathname.includes(
-                      "/employer/change-password".split("?")[0]
-                    ) || pathname.includes("/employer/change-password"),
-                  "text-shade-light/70 hover:bg-neutral-50 hover:text-core-primary hover:ease-linear":
-                    !pathname.includes(
-                      "/employer/change-password".split("?")[0]
-                    ) || !pathname.includes("/employer/change-password"),
-                }
-              )}
-            >
-              <UserAccountIcon /> <p>Change Password</p>
-            </Link> */}
+
             <Button
               className="my-2 flex w-full justify-start px-[10px] py-[9px] text-shade-light/70 shadow transition-colors hover:rounded-lg hover:bg-neutral-50 hover:text-core-primary hover:ease-linear"
               LeftIcon={Logout01Icon}

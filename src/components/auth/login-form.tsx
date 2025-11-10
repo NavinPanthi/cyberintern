@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+
+import { setUser } from "@/redux/slices/user-slice";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -20,25 +23,40 @@ const schema = yup
 
 type LoginSchemaType = yup.InferType<typeof schema>;
 
-const LoginForm = ({}: { handleLogin?: SubmitHandler<LoginSchemaType> }) => {
+const LoginForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<LoginSchemaType>({
     resolver: yupResolver(schema),
   });
-  const navigate = useNavigate();
+
+  const handleLogin: SubmitHandler<LoginSchemaType> = (data) => {
+    const email = data.email.toLowerCase();
+
+    if (email.includes("admin")) {
+      navigate("/admin/internships");
+      dispatch(
+        setUser({
+          fullName: "Admin",
+          email: data.email,
+          phone: "7453439034",
+          address: "Burnley",
+          role: "admin",
+        })
+      );
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
-    <form
-      className="mt-6"
-      onSubmit={() => {
-        navigate("/");
-      }}
-    >
+    <form className="mt-6" onSubmit={handleSubmit(handleLogin)}>
       <fieldset>
         <Label htmlFor="email">Email</Label>
-
         <TextInput
           {...register("email")}
           id="email"
@@ -58,9 +76,9 @@ const LoginForm = ({}: { handleLogin?: SubmitHandler<LoginSchemaType> }) => {
         />
       </fieldset>
 
-      <div className="f mt-4 text-center">
+      <div className="mt-4 text-center">
         <p>
-          Not a member ?{" "}
+          Not a member?{" "}
           <b
             className="cursor-pointer font-semibold"
             onClick={() => navigate("/sign-up")}

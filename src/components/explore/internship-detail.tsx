@@ -1,20 +1,16 @@
 import { useParams } from "react-router-dom";
 
 import {
-  Building01Icon,
   Calendar01Icon,
   Dollar01Icon,
   LaptopIcon,
   Layers01Icon,
 } from "hugeicons-react";
 
-import FileUploadForm from "@/features/student/file-upload-form";
 import UploadFileForm from "@/features/student/file-upload-form";
 
 import { internships } from "@/utils/data/internship-data";
 import cn from "@/lib/classnames";
-
-import Button from "../ui/button";
 
 const InternshipDetail = ({
   className,

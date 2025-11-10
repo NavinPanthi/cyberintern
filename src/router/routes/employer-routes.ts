@@ -1,6 +1,6 @@
 import EmployerInternships from "@/pages/employer/employer-internships";
 import EmployerProfilePage from "@/pages/employer/employer-profile";
-import InternshipDetailStudentPage from "@/pages/student/intern-detail-page";
+import InternshipDetailEmployerPage from "@/pages/employer/internship-detail-employer";
 
 interface IEmployerRoutes {
   id: string;
@@ -32,7 +32,7 @@ const EmployerRoutes: IEmployerRoutes[] = [
   {
     id: "internship-page",
     path: "/internship/:id",
-    component: InternshipDetailStudentPage,
+    component: InternshipDetailEmployerPage,
     meta: {
       privateRoute: false,
     },

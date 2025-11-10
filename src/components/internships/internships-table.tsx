@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getUserData } from "@/utils/auth-storage";
+import { checkAdmin } from "@/utils/check-admin";
+
 interface InternshipTableProps {
   internships: {
     id: number | string;
@@ -26,7 +29,7 @@ const InternshipTable: React.FC<InternshipTableProps> = ({ internships }) => {
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl bg-white shadow-md">
+    <div className="overflow-auto rounded-2xl bg-white shadow-md">
       <table className="w-full border-collapse overflow-auto text-left text-sm text-gray-700">
         <thead className="bg-gray-100 uppercase text-gray-600">
           <tr>
@@ -41,7 +44,11 @@ const InternshipTable: React.FC<InternshipTableProps> = ({ internships }) => {
 
         <tbody>
           {internships
-            .filter((internship) => internship.company === "Panthi company")
+            .filter((internship) =>
+              checkAdmin(getUserData())
+                ? true
+                : internship.company === "Panthi company"
+            )
             .map((internship) => (
               <tr
                 key={internship.id}

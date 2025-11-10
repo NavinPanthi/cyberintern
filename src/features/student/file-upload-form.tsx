@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { fileSchema } from "@/schemas";
 import { ArrowUpTrayIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -13,6 +14,7 @@ import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
 
 import { addInternship } from "@/redux/slices/user-slice";
+import { RootState } from "@/redux/store";
 
 const schema = yup
   .object({
@@ -37,18 +39,23 @@ function UploadFileForm({
     register,
     handleSubmit,
     watch,
-    reset,
     resetField,
     formState: { errors },
   } = useForm<UploadFileForm>({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-
+  const navigate = useNavigate();
+  const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
   const file = watch("file")?.[0];
   const dispatch = useDispatch();
   const [isApplied, setApplied] = useState(false);
   const handleUpload: SubmitHandler<UploadFileForm> = (data) => {
+    if (!loginStatus) {
+      toast.error("Please log in to apply.");
+      navigate("/log-in");
+      return;
+    }
     const { file } = data;
     const dateApplied = String(new Date().toLocaleDateString());
     const formData = new FormData();

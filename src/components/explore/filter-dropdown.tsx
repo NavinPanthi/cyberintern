@@ -14,7 +14,7 @@ function FilterDropDown(props: any) {
       <Menu.Button
         as="div"
         className={cn(
-          "flex cursor-pointer items-center gap-2 rounded-full border-2 border-core-primary px-2 py-[10px] md:px-4",
+          "flex cursor-pointer items-center gap-[1/2] rounded-full border-2 border-core-primary px-2 py-[10px] md:gap-2 md:px-4",
           {
             "bg-core-primary-light":
               selectedFilterData && selectedFilterData.length > 0,

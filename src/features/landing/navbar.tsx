@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import {
   ClipboardIcon,
@@ -15,7 +16,8 @@ import LogoutModal from "@/components/auth/logout-modal";
 import Button from "@/components/ui/button";
 import Popup from "@/components/ui/popup";
 
-import { getUserData, isUserLogin } from "@/utils/auth-storage";
+import { RootState } from "@/redux/store";
+import { getUserData } from "@/utils/auth-storage";
 import { checkUser } from "@/utils/check-user";
 import { getInitialsTitle } from "@/utils/get-initials-title";
 import cn from "@/lib/classnames";
@@ -27,9 +29,9 @@ const Navbar = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const userData = getUserData();
-  console.log(userData);
-  const isUser = checkUser(userData);
 
+  const isUser = checkUser(userData);
+  const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -114,7 +116,11 @@ const Navbar = () => {
       title: "My applications",
       onClick: () => navigate("/my-applications"),
     },
-    { id: 6, title: "Profile", onClick: () => navigate("/student-profile") },
+    {
+      id: 6,
+      title: "Profile",
+      onClick: () => navigate(loginStatus ? "/student-profile" : "/log-in"),
+    },
     {
       id: 7,
       title: "Log out",
@@ -127,15 +133,10 @@ const Navbar = () => {
   const renderTabs = (className?: string) =>
     tabs
       .filter((tab) => {
-        // Hide tabs 5, 6, 7 when navbar is closed OR user not logged in
-        if (
-          (tab.id === 5 || tab.id === 6 || tab.id === 7) &&
-          (!isNavbarOpened || !isUser)
-        ) {
+        if ((tab.id === 5 || tab.id === 7) && (!isNavbarOpened || !isUser)) {
           return false;
         }
 
-        // Otherwise, keep the tab visible
         return true;
       })
 

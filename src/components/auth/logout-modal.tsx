@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 
 import toast from "react-hot-toast";
@@ -18,9 +17,8 @@ const LogoutModal = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+
   const handleLogout = () => {
-    queryClient.removeQueries();
     dispatch(resetLogin());
     toast.success("user logout successfully");
     navigate("/");
