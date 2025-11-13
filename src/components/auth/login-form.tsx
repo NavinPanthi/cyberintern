@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import * as yup from "yup";
 
 import { setUser } from "@/redux/slices/user-slice";
-import { getUserData } from "@/utils/auth-storage";
+import { RootState } from "@/redux/store";
+import { getSignUpData, getUserData } from "@/utils/auth-storage";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -35,24 +36,31 @@ const LoginForm = () => {
   } = useForm<LoginSchemaType>({
     resolver: yupResolver(schema),
   });
-
+  const signUpData = useSelector((state: RootState) => state.user.signUp);
   const handleLogin: SubmitHandler<LoginSchemaType> = (data) => {
     const email = data.email.toLowerCase();
+    const password = data.password;
 
-    if (email.includes("admin")) {
-      dispatch(
-        setUser({
-          fullName: "Admin",
-          email: data.email,
-          phone: "7453439034",
-          address: "Burnley",
-          role: "admin",
-        })
-      );
-      navigate("/admin/internships");
+    if (email === "admin123@gmail.com") {
+      if (password === "12345678") {
+        dispatch(
+          setUser({
+            fullName: "Admin",
+            email: data.email,
+            phone: "7453439034",
+            address: "Burnley",
+            role: "admin",
+            password: data.password,
+          })
+        );
+        toast.success("Admin login successful!");
+        navigate("/admin/internships");
+      } else {
+        toast.error("Invalid admin password.");
+      }
       return;
     }
-    const storedUser = getUserData();
+    const storedUser = signUpData || getSignUpData();
 
     if (!storedUser) {
       alert("No account found. Please sign up first.");

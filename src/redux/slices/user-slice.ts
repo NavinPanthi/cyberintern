@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
+  clearSignUpData,
   getUserData,
   isUserLogin,
   resetLoginData,
+  setSignUpData,
   setUserData,
 } from "../../utils/auth-storage";
 
@@ -28,11 +30,13 @@ export interface IUser {
 export interface IUserState {
   user: IUser | null;
   loginStatus: boolean;
+  signUp: IUser | null;
 }
 
 const initialState: IUserState = {
   user: getUserData() || null,
   loginStatus: isUserLogin() || false,
+  signUp: null,
 };
 
 export const userSlice = createSlice({
@@ -44,6 +48,11 @@ export const userSlice = createSlice({
       setUserData(updatedUser);
       state.user = updatedUser;
       state.loginStatus = true;
+    },
+    setSignUp: (state, action) => {
+      const updatedSignUp = { ...state.user, ...action.payload } as IUser;
+      setSignUpData(updatedSignUp);
+      state.signUp = updatedSignUp;
     },
 
     addInternship: (state, action) => {
@@ -62,8 +71,13 @@ export const userSlice = createSlice({
       state.user = null;
       state.loginStatus = false;
     },
+    resetSignUp: (state) => {
+      clearSignUpData();
+      state.signUp = null;
+    },
   },
 });
 
-export const { setUser, addInternship, resetLogin } = userSlice.actions;
+export const { setUser, addInternship, resetLogin, setSignUp } =
+  userSlice.actions;
 export default userSlice.reducer;

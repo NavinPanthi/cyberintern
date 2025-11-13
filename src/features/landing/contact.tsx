@@ -1,13 +1,36 @@
+import { useNavigate } from "react-router-dom";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
 import Button from "../../components/ui/button";
 import Label from "../../components/ui/label";
 import TextInput from "../../components/ui/text-input";
 import TextAreaInput from "../../components/ui/textarea";
 
+interface ContactFormInputs {
+  name: string;
+  email: string;
+  message: string;
+}
+
 const Contact = () => {
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormInputs>();
+
+  const onSubmit: SubmitHandler<ContactFormInputs> = () => {
+    toast.success("Message sent");
+    reset();
+  };
+
   return (
     <section className="w-full bg-white px-4 py-16 font-sans lg:px-24">
       <div className="mx-auto grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-        {/* Text & Form */}
         <div>
           <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">
             Get in Touch
@@ -16,7 +39,8 @@ const Contact = () => {
             Have questions or want to learn more about our thrift collection?
             Send us a message and we’ll get back to you soon!
           </p>
-          <form className="space-y-4">
+
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <Label
                 className="mb-1 block text-sm text-gray-700"
@@ -29,8 +53,15 @@ const Contact = () => {
                 type="text"
                 placeholder="Your Name"
                 className="w-full rounded-md border border-gray-300 px-4 py-2"
+                {...register("name", { required: "Name is required" })}
               />
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
+
             <div>
               <Label
                 className="mb-1 block text-sm text-gray-700"
@@ -43,8 +74,21 @@ const Contact = () => {
                 type="email"
                 placeholder="you@example.com"
                 className="w-full rounded-md border border-gray-300 px-4 py-2"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Invalid email address",
+                  },
+                })}
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
+
             <div>
               <Label
                 className="mb-1 block text-sm text-gray-700"
@@ -57,8 +101,15 @@ const Contact = () => {
                 rows={4}
                 placeholder="Write your message..."
                 className="w-full rounded-md border border-gray-300 px-4 py-2"
-              ></TextAreaInput>
+                {...register("message", { required: "Message is required" })}
+              />
+              {errors.message && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.message.message}
+                </p>
+              )}
             </div>
+
             <Button type="submit">Send Message</Button>
           </form>
         </div>

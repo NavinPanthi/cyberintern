@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
 
-import { setUser } from "@/redux/slices/user-slice";
+import { setSignUp, setUser } from "@/redux/slices/user-slice";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -61,8 +61,8 @@ const SignUpForm = ({
           role: isSignUpAsEmployer ? "employer" : "student",
         };
 
-        dispatch(setUser(newUser));
-        // toast.success("Sign up successful! Please log in to continue.");
+        dispatch(setSignUp(newUser));
+        toast.success("Sign up successful! Please log in to continue.");
         navigate("/log-in");
       })}
     >
