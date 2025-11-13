@@ -21,6 +21,7 @@ export interface IUser {
   address?: string;
   phone?: string;
   role?: string;
+  password?: string;
   internships?: IInternship[];
 }
 

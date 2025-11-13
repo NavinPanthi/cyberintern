@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as yup from "yup";
 
 import { setUser } from "@/redux/slices/user-slice";
@@ -51,16 +52,18 @@ const SignUpForm = ({
     <form
       className="mt-6"
       onSubmit={handleSubmit((data) => {
-        dispatch(
-          setUser({
-            fullName: data.fullName,
-            email: data.email,
-            phone: data.phone,
-            address: data.address,
-            role: isSignUpAsEmployer ? "employer" : "student",
-          })
-        );
-        isSignUpAsEmployer ? navigate("/employer/internships") : navigate("/");
+        const newUser = {
+          fullName: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          password: data.password,
+          role: isSignUpAsEmployer ? "employer" : "student",
+        };
+
+        dispatch(setUser(newUser));
+        // toast.success("Sign up successful! Please log in to continue.");
+        navigate("/log-in");
       })}
     >
       <fieldset>

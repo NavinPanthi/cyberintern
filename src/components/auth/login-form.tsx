@@ -3,9 +3,11 @@ import { useDispatch } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import * as yup from "yup";
 
 import { setUser } from "@/redux/slices/user-slice";
+import { getUserData } from "@/utils/auth-storage";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -38,7 +40,6 @@ const LoginForm = () => {
     const email = data.email.toLowerCase();
 
     if (email.includes("admin")) {
-      navigate("/admin/internships");
       dispatch(
         setUser({
           fullName: "Admin",
@@ -48,11 +49,30 @@ const LoginForm = () => {
           role: "admin",
         })
       );
-    } else {
-      navigate("/");
+      navigate("/admin/internships");
+      return;
     }
-  };
+    const storedUser = getUserData();
 
+    if (!storedUser) {
+      alert("No account found. Please sign up first.");
+      return;
+    }
+
+    if (
+      data.email !== storedUser.email ||
+      data.password !== storedUser.password
+    ) {
+      toast.error("Incorrect email or password.");
+      return;
+    }
+
+    dispatch(setUser(storedUser));
+
+    if (storedUser.role === "admin") navigate("/admin/internships");
+    else if (storedUser.role === "employer") navigate("/employer/internships");
+    else navigate("/");
+  };
   return (
     <form className="mt-6" onSubmit={handleSubmit(handleLogin)}>
       <fieldset>
