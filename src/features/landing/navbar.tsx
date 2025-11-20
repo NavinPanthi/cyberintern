@@ -201,7 +201,7 @@ const Navbar = () => {
             <GetProfileIcon />
           </span>
         </div>
-
+        {/* Phone */}
         <div className="flex w-full flex-col items-center justify-between gap-6 p-4 sm:hidden">
           <div className="flex w-full items-center justify-between">
             <p

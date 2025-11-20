@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import AdminLayout from "@/layout/admin-layout";

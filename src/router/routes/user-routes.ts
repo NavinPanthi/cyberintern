@@ -1,14 +1,18 @@
 import { lazy } from "react";
 
-import Login from "@/pages/auth/login";
-import AboutPage from "@/pages/landing/about";
-import ContactPage from "@/pages/landing/contact";
-import ExplorePage from "@/pages/landing/explore";
-import InternshipDetailStudentPage from "@/pages/student/intern-detail-page";
-import MyApplication from "@/pages/student/my-application";
-import StudentProfilePage from "@/pages/student/student-profile";
-
+const Login = lazy(() => import("@/pages/auth/login"));
+const AboutPage = lazy(() => import("@/pages/landing/about"));
+const ContactPage = lazy(() => import("@/pages/landing/contact"));
+const ExplorePage = lazy(() => import("@/pages/landing/explore"));
+const InternshipDetailStudentPage = lazy(
+  () => import("@/pages/student/intern-detail-page")
+);
+const MyApplication = lazy(() => import("@/pages/student/my-application"));
+const StudentProfilePage = lazy(
+  () => import("@/pages/student/student-profile")
+);
 const Landing = lazy(() => import("@/pages/landing/landing"));
+
 interface IUserRoutes {
   id: string;
   path: string;

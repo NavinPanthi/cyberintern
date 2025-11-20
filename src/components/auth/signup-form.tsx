@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
 
-import { setSignUp, setUser } from "@/redux/slices/user-slice";
+import { setSignUp } from "@/redux/slices/user-slice";
 
 import Button from "../ui/button";
 import Label from "../ui/label";

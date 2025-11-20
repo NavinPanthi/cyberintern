@@ -50,6 +50,7 @@ function UploadFileForm({
   const file = watch("file")?.[0];
   const dispatch = useDispatch();
   const [isApplied, setApplied] = useState(false);
+
   const handleUpload: SubmitHandler<UploadFileForm> = (data) => {
     if (!loginStatus) {
       toast.error("Please log in to apply.");
@@ -99,7 +100,7 @@ function UploadFileForm({
             </div>
           ) : (
             <>
-              <p className="body-large">Drag and drop your document</p>
+              <p className="body-large">Upload your document</p>
 
               <label className="mt-4">
                 <div className="secondary-btn-md flex w-fit cursor-pointer items-center gap-2">

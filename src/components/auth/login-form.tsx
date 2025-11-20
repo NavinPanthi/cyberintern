@@ -8,7 +8,7 @@ import * as yup from "yup";
 
 import { setUser } from "@/redux/slices/user-slice";
 import { RootState } from "@/redux/store";
-import { getSignUpData, getUserData } from "@/utils/auth-storage";
+import { getSignUpData } from "@/utils/auth-storage";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
