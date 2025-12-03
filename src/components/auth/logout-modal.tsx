@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import toast from "react-hot-toast";
 
-import { resetLogin, resetSignUp } from "@/redux/slices/user-slice";
+import { resetLogin } from "@/redux/slices/user-slice";
 
 import Button from "../ui/button";
 import Modal from "../ui/modal";
@@ -20,7 +20,6 @@ const LogoutModal = ({
 
   const handleLogout = () => {
     dispatch(resetLogin());
-    dispatch(resetSignUp());
     toast.success("user logout successfully");
     navigate("/");
   };

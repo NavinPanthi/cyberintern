@@ -1,12 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as yup from "yup";
-
-import { setSignUp } from "@/redux/slices/user-slice";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -28,18 +22,16 @@ const schema = yup
 type SignUpSchemaType = yup.InferType<typeof schema>;
 
 const SignUpForm = ({
+  handleSignUp,
   isPending,
   isSignUpAsEmployer,
   setIsSignUpAsEmployer,
 }: {
-  handleSignUp?: SubmitHandler<SignUpSchemaType>;
+  handleSignUp: SubmitHandler<SignUpSchemaType>;
   isPending?: boolean;
   isSignUpAsEmployer: boolean;
   setIsSignUpAsEmployer: () => void;
 }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const {
     register,
     handleSubmit,
@@ -49,23 +41,7 @@ const SignUpForm = ({
   });
 
   return (
-    <form
-      className="mt-6"
-      onSubmit={handleSubmit((data) => {
-        const newUser = {
-          fullName: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          address: data.address,
-          password: data.password,
-          role: isSignUpAsEmployer ? "employer" : "student",
-        };
-
-        dispatch(setSignUp(newUser));
-        toast.success("Sign up successful! Please log in to continue.");
-        navigate("/log-in");
-      })}
-    >
+    <form className="mt-6" onSubmit={handleSubmit(handleSignUp)}>
       <fieldset>
         <Label htmlFor="fullName">
           {isSignUpAsEmployer ? "Company name" : "Full name"}

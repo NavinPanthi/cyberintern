@@ -13,7 +13,6 @@ import * as yup from "yup";
 import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
 
-import { addInternship } from "@/redux/slices/user-slice";
 import { RootState } from "@/redux/store";
 
 const schema = yup
@@ -61,7 +60,7 @@ function UploadFileForm({
     const dateApplied = String(new Date().toLocaleDateString());
     const formData = new FormData();
     formData.append("document", file[0]);
-    dispatch(addInternship({ company, status, title, dateApplied }));
+
     setApplied(true);
     toast.success("Internship applied successfully.");
   };

@@ -1,5 +1,35 @@
+import { IUser } from "../redux/slices/user-slice";
+
+interface ISetUserLoginProps {
+  isRememberMe: boolean;
+  userData: IUser;
+  token: string;
+}
+
+const TOKEN_KEY = "token";
 const USER_DATA_KEY = "user";
-const SIGNUP_DATA_KEY = "signup";
+
+export function getToken() {
+  const localStorageToken = localStorage.getItem(TOKEN_KEY);
+  const sessionStorageToken = sessionStorage.getItem(TOKEN_KEY);
+
+  if (localStorageToken) return localStorageToken;
+  if (sessionStorageToken) return sessionStorageToken;
+  return null;
+}
+
+export function setUserLogin(props: ISetUserLoginProps) {
+  const { isRememberMe = false, userData, token } = props;
+
+  if (isRememberMe) {
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+    localStorage.setItem(TOKEN_KEY, token);
+    return;
+  }
+
+  sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+  sessionStorage.setItem(TOKEN_KEY, token);
+}
 
 export function getUserData() {
   const localStorageData = localStorage.getItem(USER_DATA_KEY);
@@ -14,8 +44,8 @@ export function getUserData() {
 }
 
 export function isUserLogin() {
-  const localStorageToken = localStorage.getItem(USER_DATA_KEY);
-  const sessionStorageToken = sessionStorage.getItem(USER_DATA_KEY);
+  const localStorageToken = localStorage.getItem(TOKEN_KEY);
+  const sessionStorageToken = sessionStorage.getItem(TOKEN_KEY);
   const userData = getUserData();
 
   if (localStorageToken || sessionStorageToken || userData) return true;
@@ -30,27 +60,14 @@ export function resetLoginData() {
 export function setUserData(userData: object) {
   if (!userData) return;
 
-  localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+  const localStorageUserData = localStorage.getItem(USER_DATA_KEY);
+  const sessionStorageUserData = sessionStorage.getItem(USER_DATA_KEY);
 
-  sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
-}
-
-//sign up data functions
-
-export function getSignUpData() {
-  const data = localStorage.getItem(SIGNUP_DATA_KEY);
-  try {
-    return data ? JSON.parse(data) : null;
-  } catch {
-    return null;
+  if (localStorageUserData) {
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+    return;
   }
-}
-
-export function setSignUpData(userData: object) {
-  if (!userData) return;
-  localStorage.setItem(SIGNUP_DATA_KEY, JSON.stringify(userData));
-}
-
-export function clearSignUpData() {
-  localStorage.removeItem(SIGNUP_DATA_KEY);
+  if (sessionStorageUserData) {
+    sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+  }
 }

@@ -50,6 +50,7 @@ const getRoutes = (loginStatus: boolean) => {
 
 function Router() {
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
+  console.log(loginStatus);
 
   const routes = getRoutes(loginStatus as boolean);
 

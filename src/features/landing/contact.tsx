@@ -15,7 +15,7 @@ interface ContactFormInputs {
 }
 
 const Contact = () => {
-  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,

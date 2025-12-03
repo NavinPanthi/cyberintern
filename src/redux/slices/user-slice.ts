@@ -1,69 +1,53 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import {
-  clearSignUpData,
+  getToken,
   getUserData,
   isUserLogin,
   resetLoginData,
-  setSignUpData,
   setUserData,
+  setUserLogin,
 } from "../../utils/auth-storage";
 
-export interface IInternship {
-  company: string;
-  title: string;
-  dateApplied: string | Date;
-  status: string;
-}
-
-// Define structure for user data
 export interface IUser {
+  id: number;
   fullName: string;
   email: string;
   address?: string;
   phone?: string;
-  role?: string;
-  password?: string;
-  internships?: IInternship[];
+  imageName?: string;
+  imageType?: string;
+  imageData?: string;
+  roles: string[];
+  token: string;
 }
 
 export interface IUserState {
+  accessToken: string | null;
   user: IUser | null;
   loginStatus: boolean;
-  signUp: IUser | null;
 }
 
 const initialState: IUserState = {
-  user: getUserData() || null,
+  accessToken: getToken() || null,
+  user: getUserData() || {},
   loginStatus: isUserLogin() || false,
-  signUp: null,
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      const updatedUser = { ...state.user, ...action.payload } as IUser;
-      setUserData(updatedUser);
-      state.user = updatedUser;
+    setLogin: (state, action) => {
+      setUserLogin({ ...action.payload });
+      state.accessToken = action.payload?.token;
+      state.user = action.payload?.userData;
       state.loginStatus = true;
     },
-    setSignUp: (state, action) => {
-      const updatedSignUp = { ...state.user, ...action.payload } as IUser;
-      setSignUpData(updatedSignUp);
-      state.signUp = updatedSignUp;
-    },
 
-    addInternship: (state, action) => {
-      if (state.user) {
-        const updatedUser = {
-          ...state.user,
-          internships: [...(state.user.internships || []), action.payload],
-        };
-        setUserData(updatedUser);
-        state.user = updatedUser;
-      }
+    setUser: (state, action) => {
+      setUserData({ ...state.user, ...action.payload });
+      state.user = { ...state.user, ...action.payload };
     },
 
     resetLogin: (state) => {
@@ -71,13 +55,8 @@ export const userSlice = createSlice({
       state.user = null;
       state.loginStatus = false;
     },
-    resetSignUp: (state) => {
-      clearSignUpData();
-      state.signUp = null;
-    },
   },
 });
 
-export const { setUser, addInternship, resetLogin, setSignUp, resetSignUp } =
-  userSlice.actions;
+export const { setLogin, setUser, resetLogin } = userSlice.actions;
 export default userSlice.reducer;

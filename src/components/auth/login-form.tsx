@@ -1,14 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as yup from "yup";
-
-import { setUser } from "@/redux/slices/user-slice";
-import { RootState } from "@/redux/store";
-import { getSignUpData } from "@/utils/auth-storage";
 
 import Button from "../ui/button";
 import Label from "../ui/label";
@@ -21,14 +15,19 @@ const schema = yup
       .email("Email must be valid.")
       .required("Email is required."),
     password: yup.string().required("Password is required."),
+    isRememberMe: yup.boolean().default(false).required(),
   })
   .required();
 
 type LoginSchemaType = yup.InferType<typeof schema>;
 
-const LoginForm = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+const LoginForm = ({
+  handleLogin,
+  isPending,
+}: {
+  handleLogin: SubmitHandler<LoginSchemaType>;
+  isPending: boolean;
+}) => {
   const {
     register,
     handleSubmit,
@@ -36,55 +35,13 @@ const LoginForm = () => {
   } = useForm<LoginSchemaType>({
     resolver: yupResolver(schema),
   });
-  const signUpData = useSelector((state: RootState) => state.user.signUp);
-  const handleLogin: SubmitHandler<LoginSchemaType> = (data) => {
-    const email = data.email.toLowerCase();
-    const password = data.password;
+  const navigate = useNavigate();
 
-    if (email === "admin123@gmail.com") {
-      if (password === "12345678") {
-        dispatch(
-          setUser({
-            fullName: "Admin",
-            email: data.email,
-            phone: "7453439034",
-            address: "Burnley",
-            role: "admin",
-            password: data.password,
-          })
-        );
-        toast.success("Admin login successful!");
-        navigate("/admin/internships");
-      } else {
-        toast.error("Invalid admin password.");
-      }
-      return;
-    }
-    const storedUser = signUpData || getSignUpData();
-
-    if (!storedUser) {
-      alert("No account found. Please sign up first.");
-      return;
-    }
-
-    if (
-      data.email !== storedUser.email ||
-      data.password !== storedUser.password
-    ) {
-      toast.error("Incorrect email or password.");
-      return;
-    }
-
-    dispatch(setUser(storedUser));
-
-    if (storedUser.role === "admin") navigate("/admin/internships");
-    else if (storedUser.role === "employer") navigate("/employer/internships");
-    else navigate("/");
-  };
   return (
     <form className="mt-6" onSubmit={handleSubmit(handleLogin)}>
       <fieldset>
         <Label htmlFor="email">Email</Label>
+
         <TextInput
           {...register("email")}
           id="email"
@@ -104,9 +61,21 @@ const LoginForm = () => {
         />
       </fieldset>
 
-      <div className="mt-4 text-center">
+      <div className="mt-4">
+        <div className="flex gap-2">
+          <TextInput
+            {...register("isRememberMe")}
+            type="checkbox"
+            className="cursor-pointer"
+          />
+
+          <label>Remember me</label>
+        </div>
+      </div>
+
+      <div className="f mt-4 text-center">
         <p>
-          Not a member?{" "}
+          Not a member ?{" "}
           <b
             className="cursor-pointer font-semibold"
             onClick={() => navigate("/sign-up")}
@@ -116,7 +85,12 @@ const LoginForm = () => {
         </p>
       </div>
 
-      <Button type="submit" className="mt-8 w-full" size="lg">
+      <Button
+        isLoading={isPending}
+        type="submit"
+        className="mt-8 w-full"
+        size="lg"
+      >
         Login
       </Button>
     </form>
