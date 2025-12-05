@@ -2,6 +2,12 @@ import Footer from "@/features/landing/footer";
 import Navbar from "@/features/landing/navbar";
 import EditProfileForm from "@/components/auth/edit-profile-form";
 
+export interface IHandleEditProfile {
+  fullName: string;
+  phone?: string;
+  address?: string;
+}
+
 const StudentProfilePage = () => {
   return (
     <>

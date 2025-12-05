@@ -51,7 +51,7 @@ const Footer = () => {
           <h3 className="mb-3 font-bold text-white">STUDENT ACCOUNT</h3>
           <ul className="space-y-2 text-sm">
             <li>Sign In</li>
-            <li>My Applications</li>
+
             <li>Profile Settings</li>
           </ul>
         </div>

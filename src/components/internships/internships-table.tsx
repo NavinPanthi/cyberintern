@@ -1,25 +1,13 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getUserData } from "@/utils/auth-storage";
-import { checkAdmin } from "@/utils/check-admin";
+import { InternshipItem } from "@/@types/internships-list-response";
 
-interface InternshipTableProps {
-  internships: {
-    id: number | string;
-    title: string;
-    image: string;
-    datePosted: string;
-    type: string;
-    skillLevel: string;
-    payment: string;
-    company: string;
-  }[];
-}
-
-const InternshipTable: React.FC<InternshipTableProps> = ({ internships }) => {
+const InternshipTable = ({
+  internships,
+}: {
+  internships: InternshipItem[];
+}) => {
   const navigate = useNavigate();
-
   if (internships.length === 0) {
     return (
       <p className="col-span-full flex min-h-[50vh] items-center justify-center text-gray-500">
@@ -43,41 +31,35 @@ const InternshipTable: React.FC<InternshipTableProps> = ({ internships }) => {
         </thead>
 
         <tbody>
-          {internships
-            .filter((internship) =>
-              checkAdmin(getUserData())
-                ? true
-                : internship.company === "Panthi company"
-            )
-            .map((internship) => (
-              <tr
-                key={internship.id}
-                onClick={() => navigate(`/internship/${internship.id}`)}
-                className="cursor-pointer border-b transition duration-150 hover:bg-gray-50"
-              >
-                {/* Internship Image */}
-                <td className="px-6 py-4">
-                  <img
-                    src={internship.image}
-                    alt={internship.title}
-                    className="h-12 w-12 rounded-lg object-cover"
-                  />
-                </td>
+          {internships.map((internship) => (
+            <tr
+              key={internship.id}
+              onClick={() => navigate(`/internship/${internship.id}`)}
+              className="cursor-pointer border-b transition duration-150 hover:bg-gray-50"
+            >
+              {/* Internship Image */}
+              <td className="px-6 py-4">
+                <img
+                  src={`data:${internship.images[0]?.imageType};base64,${internship.images[0]?.imageData}`}
+                  alt={internship.title}
+                  className="h-12 w-12 rounded-lg object-cover"
+                />
+              </td>
 
-                <td className="px-6 py-4 font-medium text-gray-900">
-                  {internship.title}
-                </td>
+              <td className="px-6 py-4 font-medium text-gray-900">
+                {internship.title}
+              </td>
 
-                <td className="px-6 py-4">{internship.datePosted}</td>
+              <td className="px-6 py-4">{internship.listingDate}</td>
 
-                {/* Type */}
-                <td className="px-6 py-4">{internship.type}</td>
+              {/* Type */}
+              <td className="px-6 py-4">{internship.type}</td>
 
-                <td className="px-6 py-4">{internship.skillLevel}</td>
+              <td className="px-6 py-4">{internship.level}</td>
 
-                <td className="px-6 py-4">{internship.payment}</td>
-              </tr>
-            ))}
+              <td className="px-6 py-4">{internship.payment}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

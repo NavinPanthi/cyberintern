@@ -7,7 +7,7 @@ const ExplorePage = lazy(() => import("@/pages/landing/explore"));
 const InternshipDetailStudentPage = lazy(
   () => import("@/pages/student/intern-detail-page")
 );
-const MyApplication = lazy(() => import("@/pages/student/my-application"));
+
 const StudentProfilePage = lazy(
   () => import("@/pages/student/student-profile")
 );
@@ -78,15 +78,7 @@ const userRoutes: IUserRoutes[] = [
       privateRoute: false,
     },
   },
-  {
-    id: "application-page",
-    path: "/my-applications",
-    component: MyApplication,
-    meta: {
-      userLayout: true,
-      privateRoute: false,
-    },
-  },
+
   {
     id: "student-profile",
     path: "/student-profile",

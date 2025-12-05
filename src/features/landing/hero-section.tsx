@@ -1,11 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import InternshipCard from "@/components/explore/internship-card";
 import TextInput from "@/components/ui/text-input";
 
-import { internships } from "@/utils/data/internship-data";
+import { InternshipItem } from "@/@types/internships-list-response";
+
+import useGetUserInternshipsQuery from "@/services/user/use-get-user-internships-query";
+
+// import { internships } from "@/utils/data/internship-data";
 
 type FormValues = {
   search: string;
@@ -13,7 +18,19 @@ type FormValues = {
 
 const InternshipHeroSection = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams({
+    page: "1",
+    size: "20",
+  });
 
+  const params = new URLSearchParams(location.search);
+  const initialSearch = params.get("search") || "";
+  const [search] = useState<string | undefined>(initialSearch);
+
+  const { data: internsData } = useGetUserInternshipsQuery({
+    search,
+    searchParams,
+  });
   const { register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       search: "",
@@ -64,15 +81,15 @@ const InternshipHeroSection = () => {
         </form>
       </div>
 
-      {/* Featured Internships */}
       <div className="mt-16 w-full max-w-6xl">
         <h3 className="mb-6 text-xl font-bold text-black">
           Featured Internships
         </h3>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {internships.slice(0, 5).map((internship, idx) => (
-            <InternshipCard key={idx} {...internship} />
-          ))}
+          {internsData &&
+            internsData.items
+              .slice(0, 5)
+              .map((internship) => <InternshipCard internship={internship} />)}
         </div>
       </div>
     </section>

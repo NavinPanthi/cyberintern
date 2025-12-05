@@ -1,61 +1,34 @@
-import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import InternSearchInput from "@/features/student/internship-search-input";
 import ShimmerTable from "@/components/explore/internship-table-shinmer";
 import InternshipTable from "@/components/internships/internships-table";
 
-import { internships } from "@/utils/data/internship-data";
+import useGetUserInternshipsQuery from "@/services/user/use-get-user-internships-query";
 
 const AdminInternships = () => {
-  const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams({
+    page: "1",
+    size: "20",
+  });
+
   const params = new URLSearchParams(location.search);
   const initialSearch = params.get("search") || "";
   const [search, setSearch] = useState<string | undefined>(initialSearch);
   const [selectedType, setSelectedType] = useState<string[]>([]);
   const [selectedSkillLevel, setSelectedSkillLevel] = useState<string[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<string[]>([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const filteredInternships = useMemo(() => {
-    return internships.filter((internship) => {
-      const matchesSearch =
-        !search ||
-        internship.title.toLowerCase().includes(search.toLowerCase()) ||
-        internship.company.toLowerCase().includes(search.toLowerCase());
-
-      const matchesType =
-        selectedType.length === 0 ||
-        selectedType.some(
-          (type) => type.toLowerCase() === internship.type.toLowerCase()
-        );
-
-      const matchesSkill =
-        selectedSkillLevel.length === 0 ||
-        selectedSkillLevel.some(
-          (level) => level.toLowerCase() === internship.skillLevel.toLowerCase()
-        );
-
-      const matchesPayment =
-        selectedPayment.length === 0 ||
-        selectedPayment.some(
-          (pay) => pay.toLowerCase() === internship.payment.toLowerCase()
-        );
-
-      return matchesSearch && matchesType && matchesSkill && matchesPayment;
-    });
-  }, [search, selectedType, selectedSkillLevel, selectedPayment]);
-
+  const { data: internsData, isPending } = useGetUserInternshipsQuery({
+    selectedSkillLevel,
+    selectedPayment,
+    selectedType,
+    search,
+    searchParams,
+  });
+  if (isPending) {
+    return <ShimmerTable />;
+  }
   return (
     <div className="relative gap-2 px-4">
       <h2 className="mb-4 pt-12 text-3xl font-bold text-gray-800 md:text-4xl">
@@ -72,13 +45,16 @@ const AdminInternships = () => {
         setSelectedPayment={setSelectedPayment}
         setSearch={setSearch}
       />
-      {isLoading ? (
-        <ShimmerTable />
-      ) : (
-        <div className="py-12">
-          <InternshipTable internships={filteredInternships} />
-        </div>
-      )}
+
+      <div className="py-12">
+        {internsData && internsData.items.length > 0 ? (
+          <InternshipTable internships={internsData.items} />
+        ) : (
+          <p className="col-span-full flex min-h-[50vh] items-center justify-center text-gray-500">
+            No internships found.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

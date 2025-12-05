@@ -37,6 +37,7 @@ const MergedLayoutRoute = ({ children }: { children?: React.ReactNode }) => {
 };
 
 const getRoutes = (loginStatus: boolean) => {
+  console.log(checkAdmin(getUserData()));
   if (!loginStatus) {
     return authRoutes;
   }
@@ -50,7 +51,6 @@ const getRoutes = (loginStatus: boolean) => {
 
 function Router() {
   const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
-  console.log(loginStatus);
 
   const routes = getRoutes(loginStatus as boolean);
 

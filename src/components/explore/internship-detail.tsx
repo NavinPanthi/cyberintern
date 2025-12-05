@@ -9,8 +9,9 @@ import {
 
 import UploadFileForm from "@/features/student/file-upload-form";
 
-import { internships } from "@/utils/data/internship-data";
 import cn from "@/lib/classnames";
+
+import useGetSingleInternshipQuery from "@/services/internships/use-get-single-internship";
 
 const InternshipDetail = ({
   className,
@@ -22,15 +23,19 @@ const InternshipDetail = ({
   internshipId?: string | number;
 }) => {
   const { id } = useParams<{ id: string }>();
+
   const resolvedInternshipId = internshipId || id;
 
-  const internship = internships.find(
-    (item) => item.id === Number(resolvedInternshipId)
+  const { data: internship, isPending } = useGetSingleInternshipQuery(
+    resolvedInternshipId ?? ""
   );
 
-  if (!internship) {
+  if (isPending) return <div className="py-10 text-center">Loading...</div>;
+
+  if (!internship)
     return <div className="py-10 text-center">Internship not found.</div>;
-  }
+
+  const firstImage = internship.images[0];
 
   return (
     <div className={cn(className, "mx-auto max-w-6xl px-4 py-10")}>
@@ -38,7 +43,7 @@ const InternshipDetail = ({
         {/* Internship Image */}
         <div className="flex items-center justify-center">
           <img
-            src={internship.image}
+            src={`data:${firstImage.imageType};base64,${firstImage.imageData}`}
             alt={internship.title}
             className="max-h-[80vh] w-full rounded-2xl object-cover shadow"
           />
@@ -49,13 +54,13 @@ const InternshipDetail = ({
           <div>
             <h1 className="text-2xl font-bold">{internship.title}</h1>
             <p className="flex items-center gap-2 text-2xl text-core-primary-mid-light">
-              {internship.company}
+              {internship.employerFullName}
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-gray-700">
             <Calendar01Icon className="h-4 w-4 text-gray-500" />
-            <span>Date posted: {internship.datePosted}</span>
+            <span>Date posted: {internship.listingDate}</span>
           </div>
 
           <div className="flex items-center gap-2 text-gray-700">
@@ -65,7 +70,7 @@ const InternshipDetail = ({
 
           <div className="flex items-center gap-2 text-gray-700">
             <Layers01Icon className="h-4 w-4 text-gray-500" />
-            <span>Skill level: {internship.skillLevel}</span>
+            <span>Skill level: {internship.level}</span>
           </div>
 
           <div className="flex items-center gap-2 text-gray-700">
@@ -76,15 +81,15 @@ const InternshipDetail = ({
           <div className="mt-4 text-gray-600">
             <p>
               Gain hands-on experience in {internship.title.toLowerCase()} with{" "}
-              {internship.company}. Work with professionals to enhance your
-              cybersecurity skills and practical knowledge.
+              {internship.employerFullName}. Work with professionals to enhance
+              your cybersecurity skills and practical knowledge.
             </p>
           </div>
 
           {applySection && (
             <>
               <UploadFileForm
-                company={internship.company}
+                company={internship.employerFullName}
                 status="Pending"
                 title={internship.title}
               />

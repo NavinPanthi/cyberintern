@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import {
   ClipboardIcon,
@@ -16,7 +15,6 @@ import LogoutModal from "@/components/auth/logout-modal";
 import Button from "@/components/ui/button";
 import Popup from "@/components/ui/popup";
 
-import { RootState } from "@/redux/store";
 import { getUserData } from "@/utils/auth-storage";
 import { checkUser } from "@/utils/check-user";
 import { getInitialsTitle } from "@/utils/get-initials-title";
@@ -29,9 +27,10 @@ const Navbar = () => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   const userData = getUserData();
+  console.log(userData);
 
   const isUser = checkUser(userData);
-  const loginStatus = useSelector<RootState>((state) => state.user.loginStatus);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -45,6 +44,8 @@ const Navbar = () => {
   }, []);
 
   const GetProfileIcon = () => {
+    const isUser = checkUser(userData);
+    console.log(isUser);
     return isUser ? (
       <Popup
         button={
@@ -59,17 +60,6 @@ const Navbar = () => {
             rounded="sm"
             type="button"
             variant="tertiary"
-            LeftIcon={ClipboardIcon}
-            size="sm"
-            className="justify-start text-nowrap"
-            onClick={() => navigate("/my-applications")}
-          >
-            My applications
-          </Button>
-          <Button
-            rounded="sm"
-            type="button"
-            variant="tertiary"
             LeftIcon={Profile02Icon}
             size="sm"
             className="justify-start"
@@ -77,17 +67,7 @@ const Navbar = () => {
           >
             Profile
           </Button>
-          {/* <Button
-            rounded="sm"
-            type="button"
-            variant="tertiary"
-            size="sm"
-            LeftIcon={ResetPasswordIcon}
-            className="justify-start text-nowrap"
-            onClick={() => navigate("/change-password")}
-          >
-            Change password
-          </Button> */}
+
           <Button
             rounded="sm"
             type="button"
@@ -111,15 +91,16 @@ const Navbar = () => {
     { id: 2, title: "explore", onClick: () => navigate("/internship") },
     { id: 3, title: "about", onClick: () => navigate("/about") },
     { id: 4, title: "contact us", onClick: () => navigate("/contact") },
-    {
-      id: 5,
-      title: "My applications",
-      onClick: () => navigate("/my-applications"),
-    },
+
     {
       id: 6,
       title: "Profile",
-      onClick: () => navigate(loginStatus ? "/student-profile" : "/log-in"),
+      onClick: () => {
+        if (!isUser) {
+          navigate("/log-in");
+        }
+        navigate("/student-profile");
+      },
     },
     {
       id: 7,

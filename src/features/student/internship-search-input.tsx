@@ -28,7 +28,10 @@ const InternSearchInput = ({
   };
 
   const hasDataInFilter =
-    selectedSkillLevel.length > 0 || selectedType.length > 0 || search;
+    selectedSkillLevel.length > 0 ||
+    selectedType.length > 0 ||
+    selectedPayment.length > 0 ||
+    search;
 
   const handleTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;

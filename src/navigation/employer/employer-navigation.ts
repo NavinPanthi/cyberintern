@@ -1,4 +1,4 @@
-import { BarCode01Icon, ClipboardIcon, HugeiconsProps } from "hugeicons-react";
+import { BarCode01Icon, HugeiconsProps } from "hugeicons-react";
 
 export interface INavigation {
   id: string;

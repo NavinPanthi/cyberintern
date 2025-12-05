@@ -26,7 +26,7 @@ const Home = () => {
         </p>
         <div className="mt-4 flex gap-2">
           <SearchInput
-            placeholder="Search product."
+            placeholder="Search internships."
             value={search}
             className="h-12 w-60 rounded-xl p-3 text-shade-dark"
             onChange={handleSearch}

@@ -76,12 +76,12 @@ const LoginForm = ({
       <div className="f mt-4 text-center">
         <p>
           Not a member ?{" "}
-          <b
+          <u
             className="cursor-pointer font-semibold"
             onClick={() => navigate("/sign-up")}
           >
             Sign up
-          </b>
+          </u>
         </p>
       </div>
 

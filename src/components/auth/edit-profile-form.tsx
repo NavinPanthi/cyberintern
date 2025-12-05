@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as yup from "yup";
 
+import { IHandleEditProfile } from "@/pages/student/student-profile";
 import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
 import TextInput from "@/components/ui/text-input";
@@ -14,11 +14,7 @@ import { setUser } from "@/redux/slices/user-slice";
 import { RootState } from "@/redux/store";
 import { getInitialsTitle } from "@/utils/get-initials-title";
 
-export interface IHandleEditProfile {
-  fullName?: string;
-  phone?: string;
-  address?: string;
-}
+import useEditProfileMutation from "@/services/auth/use-edit-profile-mutation";
 
 const schema = yup
   .object({
@@ -38,27 +34,27 @@ const EditProfileForm = () => {
   } = useForm<EditProfileSchema>({
     resolver: yupResolver(schema),
   });
-
+  const { mutate: editProfile, isPending } = useEditProfileMutation();
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user.user);
 
   const handleEditProfile: SubmitHandler<IHandleEditProfile> = (data) => {
     const { fullName, phone, address } = data;
     const formData = new FormData();
-    if (fullName) formData.set("fullName", fullName);
+    formData.set("fullName", fullName);
 
     if (phone) formData.set("phone", phone);
     if (address) formData.set("address", address);
 
+    editProfile(formData);
     dispatch(setUser({ fullName, phone, address }));
-    toast.success("Profile edited successfully.");
   };
 
   useEffect(() => {
     if (!userData) return;
 
     reset({
-      fullName: userData?.fullName,
+      fullName: userData.fullName,
       phone: userData?.phone,
       address: userData?.address,
     });
@@ -113,7 +109,12 @@ const EditProfileForm = () => {
           />
         </fieldset>
 
-        <Button type="submit" className="mt-4 w-full" size="lg">
+        <Button
+          isLoading={isPending}
+          type="submit"
+          className="mt-4 w-full"
+          size="lg"
+        >
           Edit profile
         </Button>
       </form>

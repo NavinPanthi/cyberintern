@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { getToken } from "../utils/auth-storage";
+import { getToken, resetLoginData } from "../utils/auth-storage";
 
 const baseURL: string | undefined = import.meta.env.VITE_BASE_URL;
 
@@ -18,6 +18,14 @@ http.interceptors.request.use(
     return config;
   },
   (error) => {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+
+    if (status === 401 || message === "Invalid token") {
+      resetLoginData(); // remove user + token
+      window.location.href = "/log-in"; // redirect instantly
+    }
+
     return Promise.reject(error);
   }
 );

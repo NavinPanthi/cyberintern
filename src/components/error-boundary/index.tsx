@@ -18,9 +18,9 @@ function ErrorBoundary() {
     const userData = getUserData();
     navigate(
       checkAdmin(userData)
-        ? "/admin/products"
+        ? "/admin/internships"
         : checkEmployer(userData)
-          ? "/employer/products"
+          ? "/employer/internships"
           : "/",
       {
         replace: true,

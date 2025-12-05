@@ -34,7 +34,7 @@ export function setUserLogin(props: ISetUserLoginProps) {
 export function getUserData() {
   const localStorageData = localStorage.getItem(USER_DATA_KEY);
   const sessionStorageData = sessionStorage.getItem(USER_DATA_KEY);
-
+  console.log(sessionStorageData);
   try {
     if (localStorageData) return JSON.parse(localStorageData);
     if (sessionStorageData) return JSON.parse(sessionStorageData);

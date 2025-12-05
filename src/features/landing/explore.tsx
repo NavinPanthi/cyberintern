@@ -1,61 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import InternshipCard from "@/components/explore/internship-card";
 import InternshipShimmer from "@/components/explore/internship-shimmer";
 
-import { internships } from "@/utils/data/internship-data";
-
 import InternSearchInput from "../student/internship-search-input";
 
+import useGetUserInternshipsQuery from "@/services/user/use-get-user-internships-query";
+
 const Explore = () => {
-  const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams({
+    page: "1",
+    size: "20",
+  });
+
   const params = new URLSearchParams(location.search);
   const initialSearch = params.get("search") || "";
   const [search, setSearch] = useState<string | undefined>(initialSearch);
   const [selectedType, setSelectedType] = useState<string[]>([]);
   const [selectedSkillLevel, setSelectedSkillLevel] = useState<string[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<string[]>([]);
+  const { data: internsData, isPending } = useGetUserInternshipsQuery({
+    selectedSkillLevel,
+    selectedPayment,
+    selectedType,
+    search,
+    searchParams,
+  });
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const filteredInternships = useMemo(() => {
-    return internships.filter((internship) => {
-      const matchesSearch =
-        !search ||
-        internship.title.toLowerCase().includes(search.toLowerCase()) ||
-        internship.company.toLowerCase().includes(search.toLowerCase());
-
-      const matchesType =
-        selectedType.length === 0 ||
-        selectedType.some(
-          (type) => type.toLowerCase() === internship.type.toLowerCase()
-        );
-
-      const matchesSkill =
-        selectedSkillLevel.length === 0 ||
-        selectedSkillLevel.some(
-          (level) => level.toLowerCase() === internship.skillLevel.toLowerCase()
-        );
-
-      const matchesPayment =
-        selectedPayment.length === 0 ||
-        selectedPayment.some(
-          (pay) => pay.toLowerCase() === internship.payment.toLowerCase()
-        );
-
-      return matchesSearch && matchesType && matchesSkill && matchesPayment;
-    });
-  }, [search, selectedType, selectedSkillLevel, selectedPayment]);
+  if (isPending) {
+    return <InternshipShimmer />;
+  }
 
   return (
     <div className="relative gap-2 px-4 lg:px-28">
@@ -71,21 +46,17 @@ const Explore = () => {
         setSearch={setSearch}
       />
 
-      {isLoading ? (
-        <InternshipShimmer />
-      ) : (
-        <div className="z-10 grid grid-cols-1 gap-4 py-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filteredInternships.length > 0 ? (
-            filteredInternships.map((internship, idx) => (
-              <InternshipCard key={idx} {...internship} />
-            ))
-          ) : (
-            <p className="col-span-full flex min-h-[50vh] items-center justify-center text-gray-500">
-              No internships found.
-            </p>
-          )}
-        </div>
-      )}
+      <div className="z-10 grid grid-cols-1 gap-4 py-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {internsData && internsData.items.length > 0 ? (
+          internsData.items.map((internship) => (
+            <InternshipCard internship={internship} />
+          ))
+        ) : (
+          <p className="col-span-full flex min-h-[50vh] items-center justify-center text-gray-500">
+            No internships found.
+          </p>
+        )}
+      </div>
     </div>
   );
 };
